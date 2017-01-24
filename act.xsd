@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0"
+    targetNamespace="http://www.parlament.gov.rs/propisi"
+    xmlns:pr="http://www.parlament.gov.rs/propisi">
+    <xs:annotation>
+        <xs:appinfo>
+			<jxb:schemaBindings>
+				<jxb:package name="rs.gov.parlament.propisi.entities"/>
+			</jxb:schemaBindings>
+		</xs:appinfo>
+    </xs:annotation>
+    <xs:element name="Act">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Preamble" type="xs:string"/>
+                <xs:element ref="pr:Title"/>
+                <xs:choice>
+                    <xs:element maxOccurs="unbounded" ref="pr:Part"/>
+                    <xs:element ref="pr:Article" maxOccurs="unbounded"/>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute ref="pr:Id" use="required"/>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Part">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" ref="pr:Label"/>
+                <xs:element ref="pr:Title" minOccurs="0"/>
+                <xs:element name="Chapter" maxOccurs="unbounded" minOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="pr:Label"/>
+                            <xs:element ref="pr:Title"/>
+                            <xs:element ref="pr:Section" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Section">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="pr:Title" maxOccurs="1" minOccurs="0"/>
+                <xs:choice>
+                    <xs:element ref="pr:Section" maxOccurs="unbounded"/>
+                    <xs:element maxOccurs="unbounded" ref="pr:Article"/>
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Article">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="pr:Title"/>
+                <xs:element ref="pr:Label"/>
+                <xs:element name="Content">
+                    <xs:complexType mixed="true">
+                        <xs:choice maxOccurs="unbounded" minOccurs="0">
+                            <xs:element ref="pr:Ref"/>
+                            <xs:element ref="pr:Paragraph"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute ref="pr:Id" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Paragraph">
+        <xs:complexType mixed="true">
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="pr:Ref"/>
+                <xs:element ref="pr:Point"/>
+            </xs:choice>
+            <xs:attribute ref="pr:Id" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Point">
+        <xs:complexType mixed="true">
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="pr:Ref"/>
+                <xs:element ref="pr:Subpoint"/>
+            </xs:choice>
+            <xs:attribute ref="pr:Id" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Subpoint">
+        <xs:complexType mixed="true">
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="pr:Ref"/>
+                <xs:element ref="pr:Indent"/>
+            </xs:choice>
+            <xs:attribute ref="pr:Id" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Indent">
+        <xs:complexType mixed="true">
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="pr:Ref"/>
+            </xs:sequence>
+            <xs:attribute ref="pr:Id" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Title">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="200"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:attribute name="Id" type="xs:string"/>
+    <xs:element name="Label" type="xs:string"/>
+    <xs:element name="Ref" type="xs:string"/>
+</xs:schema>

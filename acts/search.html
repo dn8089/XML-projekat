@@ -1,0 +1,26 @@
+<section>
+	<h1>Pretraga akata</h1>
+	<form name="snForm" class="snForm search" ng-submit="search()">
+		<div class="field">
+			<div class="input">
+				<input type="text" name="words" ng-model="words" required placeholder="pretraga" />
+				<span ng-show="snForm.words.$touched && snForm.words.$invalid">Unesite reči pretrage</span>
+			</div>
+		</div>
+
+		<div class="btns">
+			<button class="btn">Tra&#382;i</button>
+		</div>
+	</form>
+</section>
+<section id="results-sec">
+	
+	<div ng-if="results.length==0">Za traženu reč ne postoje rezultati pretrage</div>
+	
+	<div ng-if="results.length!=null">
+		<h1>Rezultat pretrage</h1>
+		<ul>
+			<li ng-repeat="r in results"><a ui-sref="readAct({docId : r})">{{r}}</a></li>
+		</ul>
+	</div>
+</section>
