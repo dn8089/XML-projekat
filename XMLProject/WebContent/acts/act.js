@@ -18,8 +18,6 @@
 		};
 		
 		$scope.acceptAct = function (docId) {
-			Act.acceptAct({docId:docId}, function (data) {
-				console.log(data);
 			Act.acceptAct({docId:docId}, function () {
 				$location.path('/usvojena-akta');
 			});
