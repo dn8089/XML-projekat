@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="XMLProject" default="main" basedir=".">
+	
+	<property file="build.properties"/>
+	
+	<property name="gen.dir" value="${basedir}/gen"/>
+	<property name="gen2.dir" value="${basedir}/gen2"/>
+	<property name="src.dir" value="${basedir}/src"/>
+	<property name="build.dir" value="${basedir}/build"/>
+	<property name="web.dir" value="${basedir}/WebContent"/>
+	<property name="lib.dir" value="${web.dir}/WEB-INF/lib"/>
+	<property name="dist.dir" value="${basedir}/dist"/>
+	<property name="data.dir" value="${basedir}/data"/>
+	
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="*.jar"/>
+	</path>
+	
+	<target name="clean">
+		<delete dir="${dist.dir}"/>
+		<!--<delete file="${tomee.dir}/webapps/${warname}"/>
+		<delete dir="${tomee.dir}/webapps/${dirname}"/>-->
+	</target>
+	
+	<target name="check-warname" unless="warname">
+		<fail>
+			Property "warname" is not set. Please use the file
+			"build.properties" in this directory ${basedir} to
+			set this property.
+		</fail>
+	</target>
+	
+	<target name="check-tomee" unless="tomee.dir">
+		<fail>
+			Property "tomee.dir" is not set. Please use the file
+			"build.properties" in this directory ${basedir} to
+			set this property. It must point to the directory which
+			contains the following directory: "bin", "conf", "webapps"
+			etc.
+		</fail>
+	</target>
+	
+	<target name="check-enviroment">
+		<antcall target="check-warname"/>
+		<antcall target="check-tomee"/>
+	</target>
+	
+	<target name="init" depends="clean, check-enviroment">
+		<mkdir dir="${gen.dir}"/>
+		<mkdir dir="${gen2.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+		<echo message="java.home = ${java.home}"/>
+		<echo message="tomee.dir = ${tomee.dir}"/>
+		<echo message="${lib.dir}"/>
+	</target>
+	
+	<!-- Task za generisanje objektnog modela na osnovu XSD seme -->
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+	  <classpath>
+	    <fileset dir="${lib.dir}" includes="*.jar" />
+	  </classpath>
+	</taskdef>
+	
+	<target name="generate_classes_1" depends="init">
+		<xjc schema="${data.dir}/akt.xsd" destdir="${gen.dir}"/>
+	</target>
+	
+	<target name="generate_classes_2" depends="init">
+		<xjc schema="${data.dir}/act.xsd" destdir="${gen2.dir}"/>
+	</target>
+	
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" debug="true"/>
+		<copy todir="${build.dir}">
+			<fileset dir="${src.dir}" includes="**/*.properties"/>
+		</copy>
+	</target>
+	
+	<target name="war" depends="compile">
+		<war destfile="${dist.dir}/${warname}" webxml="${web.dir}/WEB-INF/web.xml">
+			<zipfileset dir="${web.dir}">
+			</zipfileset>
+			<zipfileset dir="${data.dir}">
+				<include name="*.xsd"/>
+			</zipfileset>
+			<classes dir="build">
+				<!--<include name="**/*.class"/>
+				<include name="connection.properties"/>-->
+			</classes>
+			<lib dir="${lib.dir}">
+				<include name="*.jar"/>
+			</lib>
+		</war>
+	</target>
+	
+	<target name="deploy" depends="war">
+		<copy todir="${tomee.dir}/webapps">
+			<fileset dir="${dist.dir}" includes="${warname}"/>
+		</copy>
+	</target>
+	
+	<target name="main" depends="deploy"/>
+</project>

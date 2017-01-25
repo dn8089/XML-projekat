@@ -1,0 +1,12 @@
+<section>
+	<h1 ng-if="propAct">Predlo&#158;ena akta</h1>
+	<h1 ng-if="!propAct">Usvojena akta</h1>
+	<ul>
+		<li ng-repeat="r in results">
+			<span>{{r.docTitle}}</span>
+			<a class="btn" ui-sref="readAct({docId : r.docUri})">Pregled akta</a>
+			<a class="btn" ng-if="propAct" ng-click="deleteAct(r.docUri)">Povlačenje predloga akta</a>
+			<a class="btn" ng-if="propAct" ng-click="acceptAct(r.docUri)">Usvajanje predloga akta</a>
+		</li>
+	</ul>
+</section>

@@ -1,0 +1,43 @@
+<section>
+	<h1>NOVI akt</h1>
+	<form name="snForm" class="snForm" ng-submit="save()">
+		<div class="field">
+			<label>Naslov</label>
+			<div class="input">
+				<input type="text" name="title" ng-model="act.title" required />
+				<span ng-show="snForm.title.$touched && snForm.title.$invalid">Naslov je obavezno polje</span>
+			</div>
+		</div> 
+		
+		<div class="field">
+			<label>Preambula</label>
+			<div class="input">
+				<textarea ng-model="act.preamble" required></textarea>
+				<span ng-show="snForm.title.$touched && snForm.title.$invalid">Preambula je obavezno polje</span>
+			</div>
+		</div>
+		
+		<div class="field">
+			<label>Tip akta</label>
+			<div class="input">
+				<select name="type" ng-model="act.type">
+					<option value="decision" selected="selected">Odluka</option>
+					<!-- <option value="regulation" >Uredba</option> -->
+				</select>
+			</div>
+		</div>
+		
+		<div ng-if="act.type == 'decision'">			
+			<div ng-repeat="a in act.article" my-article></div>
+		</div>
+		
+		<div ng-if="act.type == 'regulation'">Uredba</div>
+		
+		<div class="field" ng-show="articleExists">Morate dodati clan</div>
+		
+		<div class="btns"> 
+			<a class="btn" ng-if="act.type == 'decision'" ng-click="addArticle()">Dodaj član</a>   
+			<button class="btn">SAČUVAJ</button>
+		</div>
+	</form>
+</section>

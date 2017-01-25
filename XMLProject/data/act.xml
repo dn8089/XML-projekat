@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:Act xmlns:ns1="http://www.parlament.gov.rs/propisi" ns1:Id="3" type="odluka">
+    <ns1:Preamble>xxx</ns1:Preamble>
+    <ns1:Title>Odluka</ns1:Title>
+    <ns1:Article ns1:Id="1">
+        <ns1:Label>Clan 1</ns1:Label>
+        <ns1:Content>
+            <ns1:Paragraph ns1:Id="p1"/>XXXXXXXXXXX<ns1:Ref>aaaa</ns1:Ref>
+        </ns1:Content>
+    </ns1:Article>
+</ns1:Act>
